@@ -32,17 +32,22 @@ if uploaded_file is not None:
     st.write("Classifying...")
 
     # Preprocess the image
-    img_array = np.array(image.resize((IMG_HEIGHT, IMG_WIDTH)))
-    img_array = np.expand_dims(img_array, axis=0) # Create a batch
-    
-    # If the image is grayscale, convert to 3 channels
-    if img_array.shape[-1] == 1:
-        img_array = np.repeat(img_array, 3, axis=-1)
-    elif img_array.shape[-1] == 4: # Handle RGBA images
-        img_array = img_array[:,:,:,:3] # Drop the alpha channel
+img = image.resize((IMG_WIDTH, IMG_HEIGHT))
 
-    # Make prediction
-    predictions = model.predict(img_array)
+# Convert image according to model input
+if model.input_shape[-1] == 1:
+    img = img.convert("L")
+    img_array = np.array(img)
+    img_array = np.expand_dims(img_array, axis=-1)
+else:
+    img = img.convert("RGB")
+    img_array = np.array(img)
+
+# Add batch dimension
+img_array = np.expand_dims(img_array, axis=0)
+
+# Make prediction
+predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
     predicted_class = CLASS_NAMES[np.argmax(score)]
