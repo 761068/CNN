@@ -32,26 +32,32 @@ if uploaded_file is not None:
     st.write("Classifying...")
 
     # Preprocess the image
-img = image.resize((IMG_WIDTH, IMG_HEIGHT))
+    img = image.resize((IMG_WIDTH, IMG_HEIGHT))
 
-# Convert image according to model input
-if model.input_shape[-1] == 1:
-    img = img.convert("L")
-    img_array = np.array(img)
-    img_array = np.expand_dims(img_array, axis=-1)
-else:
-    img = img.convert("RGB")
-    img_array = np.array(img)
+    # Convert image according to model input
+    if model.input_shape[-1] == 1:
+        img = img.convert("L")
+        img_array = np.array(img)
+        img_array = np.expand_dims(img_array, axis=-1)
+    else:
+        img = img.convert("RGB")
+        img_array = np.array(img)
 
-# Add batch dimension
-img_array = np.expand_dims(img_array, axis=0)
+    # Add batch dimension
+    img_array = np.expand_dims(img_array, axis=0)
 
-# Make prediction
-predictions = model.predict(img_array)
+    # Make prediction
+    predictions = model.predict(img_array)
+
     score = tf.nn.softmax(predictions[0])
 
     predicted_class = CLASS_NAMES[np.argmax(score)]
     confidence = 100 * np.max(score)
+
+    st.success(
+        f"This image most likely belongs to **{predicted_class}** "
+        f"with a **{confidence:.2f}%** confidence."
+    )
 
     st.success(f"This image most likely belongs to **{predicted_class}** with a **{confidence:.2f}%** confidence.")
 
