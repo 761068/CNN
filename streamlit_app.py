@@ -89,4 +89,4 @@ if uploaded_file is not None:
         f"This image most likely belongs to **{predicted_class}** "
         f"with a **{confidence:.2f}%** confidence."
     )
-```
+
