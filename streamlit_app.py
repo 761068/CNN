@@ -18,7 +18,7 @@ IMG_WIDTH = 128
 
 # IMPORTANT:
 # Change these names according to your actual training folders/classes
-CLASS_NAMES = ["Testing", "Training"]
+CLASS_NAMES = ["Tumor", "No tumor"]
 
 st.title("Brain Tumor MRI Classification")
 
